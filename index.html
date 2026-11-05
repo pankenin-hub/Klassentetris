@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klassen-Tetris</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Startseite -->
+<section id="screen-home" class="screen">
+  <div class="home">
+    <h1>Klassen-Tetris</h1>
+    <div class="cards">
+      <form id="join-form" class="card" autocomplete="off">
+        <h2>Mitspielen</h2>
+        <label>Raum-Code
+          <input id="join-code" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="1234" required>
+        </label>
+        <label>Dein Name
+          <input id="join-name" maxlength="16" placeholder="z. B. Mia" required>
+        </label>
+        <button type="submit" class="primary">Beitreten</button>
+        <p id="join-error" class="error" hidden></p>
+      </form>
+      <div class="card host-card">
+        <h2>Lehrkraft</h2>
+        <p>Erstellt einen Raum. Dieser Browser wird zur Beamer-Ansicht und leitet das Spiel.</p>
+        <button id="host-btn">Raum erstellen</button>
+        <p id="host-error" class="error" hidden></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lehrkraft: Lobby -->
+<section id="screen-host-lobby" class="screen" hidden>
+  <div class="lobby">
+    <div class="join-info">
+      <p class="muted">Öffnet im Browser</p>
+      <p id="host-url" class="url"></p>
+      <p class="muted">und gebt diesen Code ein:</p>
+      <p id="host-code" class="code">----</p>
+      <div id="host-qr" class="qr"></div>
+    </div>
+    <div class="lobby-side">
+      <h2>Spieler <span id="host-count">0</span>/8</h2>
+      <ul id="host-players" class="players"></ul>
+      <label class="inline">Rundenzeit
+        <select id="host-duration">
+          <option value="60">1 Minute</option>
+          <option value="120">2 Minuten</option>
+          <option value="180" selected>3 Minuten</option>
+          <option value="300">5 Minuten</option>
+        </select>
+      </label>
+      <button id="host-start" class="primary" disabled>Spiel starten</button>
+      <p class="muted small">Dieses Fenster bitte nicht schließen, solange gespielt wird.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Spiel (Lehrkraft und Schüler) -->
+<section id="screen-game" class="screen" hidden>
+  <header class="topbar">
+    <span id="game-title">Klassen-Tetris</span>
+    <span id="game-timer" class="timer">3:00</span>
+    <span id="game-code" class="muted"></span>
+  </header>
+  <div id="game-main" class="game-main">
+    <div id="own-panel" class="own-panel" hidden>
+      <div class="board-wrap own"><canvas id="own-canvas"></canvas><div id="own-overlay" class="overlay" hidden></div></div>
+      <div class="stats">
+        <div class="name" id="own-name"></div>
+        <div><span class="lbl">Punkte</span><span id="own-score">0</span></div>
+        <div><span class="lbl">Reihen</span><span id="own-lines">0</span></div>
+        <div><span class="lbl">Level</span><span id="own-level">1</span></div>
+        <div><span class="lbl">Nächster</span><canvas id="own-next"></canvas></div>
+        <div class="keys">← → bewegen<br>↑ drehen<br>↓ schneller<br>Leertaste fallen lassen</div>
+      </div>
+    </div>
+    <div id="others" class="others"></div>
+  </div>
+  <div id="results" class="results" hidden>
+    <div class="results-box">
+      <h2>Ergebnis</h2>
+      <ol id="results-list"></ol>
+      <button id="host-again" class="primary" hidden>Neue Runde</button>
+      <p id="results-wait" class="muted" hidden>Warte auf die nächste Runde …</p>
+    </div>
+  </div>
+</section>
+
+<!-- Schüler: Warteraum / Meldungen -->
+<section id="screen-wait" class="screen" hidden>
+  <div class="wait">
+    <h2 id="wait-title">Verbinde …</h2>
+    <p id="wait-text" class="muted"></p>
+    <ul id="wait-players" class="players"></ul>
+    <button id="wait-home" hidden>Zur Startseite</button>
+  </div>
+</section>
+
+<script src="vendor/peerjs.min.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script src="tetris.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
