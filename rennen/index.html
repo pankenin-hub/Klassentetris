@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klassen-Rennen</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Startseite -->
+<section id="screen-home" class="screen">
+  <div class="home">
+    <h1>Klassen-Rennen</h1>
+    <div class="cards">
+      <form id="join-form" class="card" autocomplete="off">
+        <h2>Mitfahren</h2>
+        <label>Raum-Code
+          <input id="join-code" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="1234" required>
+        </label>
+        <label>Dein Name
+          <input id="join-name" maxlength="16" placeholder="z. B. Mia" required>
+        </label>
+        <button type="submit" class="primary">Beitreten</button>
+        <p id="join-error" class="error" hidden></p>
+      </form>
+      <div class="card host-card">
+        <h2>Lehrkraft</h2>
+        <p>Erstellt einen Raum. Dieser Browser wird zur Beamer-Ansicht und leitet das Rennen.</p>
+        <button id="host-btn">Raum erstellen</button>
+        <p id="host-error" class="error" hidden></p>
+      </div>
+    </div>
+    <p class="muted small center"><a href="../">Zu Klassen-Tetris</a></p>
+  </div>
+</section>
+
+<!-- Lehrkraft: Lobby -->
+<section id="screen-host-lobby" class="screen" hidden>
+  <div class="lobby">
+    <div class="join-info">
+      <p class="muted">Öffnet im Browser</p>
+      <p id="host-url" class="url"></p>
+      <p class="muted">und gebt diesen Code ein:</p>
+      <p id="host-code" class="code">----</p>
+      <div id="host-qr" class="qr"></div>
+    </div>
+    <div class="lobby-side">
+      <h2>Fahrer <span id="host-count">0</span>/8</h2>
+      <ul id="host-players" class="players"></ul>
+      <label class="inline">Strecke
+        <select id="host-track"></select>
+      </label>
+      <label class="inline">Runden
+        <select id="host-laps">
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="5">5</option>
+          <option value="8">8</option>
+        </select>
+      </label>
+      <canvas id="host-preview" class="preview" width="320" height="180"></canvas>
+      <button id="host-start" class="primary" disabled>Rennen starten</button>
+      <p class="muted small">Dieses Fenster bitte nicht schließen, solange gefahren wird.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Rennen (Lehrkraft und Schüler) -->
+<section id="screen-game" class="screen" hidden>
+  <header class="topbar">
+    <span id="game-title">Klassen-Rennen</span>
+    <span id="game-timer" class="timer">0:00</span>
+    <span id="game-code" class="muted"></span>
+  </header>
+  <div class="game-main">
+    <div id="stage" class="stage">
+      <canvas id="race-canvas"></canvas>
+      <div id="hud" class="hud" hidden>
+        <div><span class="lbl">Platz</span><span id="hud-place">1</span></div>
+        <div><span class="lbl">Runde</span><span id="hud-lap">1/3</span></div>
+      </div>
+      <div id="overlay" class="overlay" hidden></div>
+    </div>
+    <aside class="side">
+      <h2>Stand</h2>
+      <ol id="standings" class="standings"></ol>
+      <div id="keys" class="keys" hidden>↑ Gas · ↓ Bremse/rückwärts<br>← → lenken<br>Gelbe Pfeile = Turbo!<br>Rasen bremst.</div>
+    </aside>
+  </div>
+  <div id="results" class="results" hidden>
+    <div class="results-box">
+      <h2>Ergebnis</h2>
+      <ol id="results-list"></ol>
+      <button id="host-again" class="primary" hidden>Neues Rennen</button>
+      <p id="results-wait" class="muted" hidden>Warte auf das nächste Rennen …</p>
+    </div>
+  </div>
+</section>
+
+<!-- Schüler: Warteraum / Meldungen -->
+<section id="screen-wait" class="screen" hidden>
+  <div class="wait">
+    <h2 id="wait-title">Verbinde …</h2>
+    <p id="wait-text" class="muted"></p>
+    <ul id="wait-players" class="players"></ul>
+    <button id="wait-home" hidden>Zur Startseite</button>
+  </div>
+</section>
+
+<script src="vendor/peerjs.min.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script src="race.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
