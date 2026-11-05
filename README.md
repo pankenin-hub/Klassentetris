@@ -7,7 +7,7 @@ Minimalistisches Tetris für bis zu 8 Spieler im Klassenraum. Es muss nichts ins
 1. Öffne die Spielseite am Beamer-PC und klicke auf **Raum erstellen**.
 2. Am Beamer erscheinen die Adresse, ein 4-stelliger Code und ein QR-Code.
 3. Die Schüler öffnen dieselbe Adresse, geben den Code und ihren Namen ein und klicken auf **Beitreten**.
-4. Wähle die Rundenzeit und klicke auf **Spiel starten**. Nach einem Countdown von 3 Sekunden geht es los.
+4. Wähle Spielmodus und Rundenzeit. Wenn du selbst mitspielen willst, setze das Häkchen bei **Ich spiele mit** und gib deinen Namen ein. Klicke dann auf **Spiel starten**. Nach einem Countdown von 3 Sekunden geht es los.
 5. Am Ende erscheint die Rangliste. Mit **Neue Runde** kommen alle zurück in den Warteraum.
 
 Das Fenster der Lehrkraft muss offen bleiben, solange gespielt wird, denn es leitet das Spiel.
@@ -29,6 +29,12 @@ Das Fenster der Lehrkraft muss offen bleiben, solange gespielt wird, denn es lei
 - Alle 10 Reihen steigt das Level, und die Steine fallen schneller.
 - Wer oben anstößt, bekommt ein leeres Feld und spielt weiter. Die Punkte bleiben erhalten.
 - Wer nach Ablauf der Zeit die meisten Punkte hat, gewinnt.
+
+## Regeln im Modus „Angriff“
+
+- Wer 2, 3 oder 4 Reihen auf einmal löscht, schickt 1, 2 oder 4 Müllreihen an einen zufälligen anderen Spieler.
+- Eingehender Müll wird angezeigt und kommt beim nächsten Stein von unten ins Feld. Wer vorher selbst Reihen löscht, wehrt ihn teilweise ab.
+- Wer oben anstößt, ist raus. Wer zuletzt übrig bleibt, gewinnt. Ist vorher die Zeit um, entscheiden die Punkte.
 
 ## Wenn etwas nicht klappt
 

@@ -102,3 +102,12 @@ label.inline select { width: auto; margin-left: 8px; }
 .results-box li { padding: 4px 0; }
 .results-box li.me { color: var(--own); font-weight: 700; }
 .results-box li .pts { float: right; margin-left: 24px; font-variant-numeric: tabular-nums; }
+
+.mode-info { margin: -8px 0 14px; max-width: 320px; }
+.host-play { display: flex; gap: 10px; align-items: center; margin: 4px 0 8px; }
+.host-play input[type=text], .host-play #host-name { flex: 1; padding: 8px 10px; }
+label.check { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--text); font-size: 15px; white-space: nowrap; cursor: pointer; }
+label.check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+.players li .tag { color: var(--muted); font-size: 14px; margin-left: 6px; }
+.garbage { color: var(--danger); }
+.overlay.out { color: var(--danger); font-size: 48px; text-align: center; }

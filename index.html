@@ -47,6 +47,13 @@
     <div class="lobby-side">
       <h2>Spieler <span id="host-count">0</span>/8</h2>
       <ul id="host-players" class="players"></ul>
+      <label class="inline">Spielmodus
+        <select id="host-mode">
+          <option value="classic" selected>Klassisch</option>
+          <option value="battle">Angriff</option>
+        </select>
+      </label>
+      <p id="host-mode-info" class="muted small mode-info"></p>
       <label class="inline">Rundenzeit
         <select id="host-duration">
           <option value="60">1 Minute</option>
@@ -55,6 +62,10 @@
           <option value="300">5 Minuten</option>
         </select>
       </label>
+      <div class="host-play">
+        <label class="check"><input type="checkbox" id="host-play"> Ich spiele mit</label>
+        <input id="host-name" maxlength="16" value="Lehrkraft" aria-label="Dein Name">
+      </div>
       <button id="host-start" class="primary" disabled>Spiel starten</button>
       <p class="muted small">Dieses Fenster bitte nicht schließen, solange gespielt wird.</p>
     </div>
@@ -76,6 +87,7 @@
         <div><span class="lbl">Punkte</span><span id="own-score">0</span></div>
         <div><span class="lbl">Reihen</span><span id="own-lines">0</span></div>
         <div><span class="lbl">Level</span><span id="own-level">1</span></div>
+        <div id="own-garbage-row" hidden><span class="lbl">Eingehender Müll</span><span id="own-garbage" class="garbage">0</span></div>
         <div><span class="lbl">Nächster</span><canvas id="own-next"></canvas></div>
         <div class="keys">← → bewegen<br>↑ drehen<br>↓ schneller<br>Leertaste fallen lassen</div>
       </div>

@@ -13,7 +13,7 @@ const SHAPES = {
   L: [[0,0,1],[1,1,1],[0,0,0]],
 };
 // Index 1..7 = Farbe des Steins
-const COLORS = [null, '#38bdf8', '#facc15', '#c084fc', '#4ade80', '#f87171', '#60a5fa', '#fb923c'];
+const COLORS = [null, '#38bdf8', '#facc15', '#c084fc', '#4ade80', '#f87171', '#60a5fa', '#fb923c', '#64748b'];
 const LINE_POINTS = [0, 100, 300, 500, 800];
 
 function mulberry32(seed) {
@@ -36,7 +36,12 @@ function rotateCW(m) {
 function rotateCCW(m) { return rotateCW(rotateCW(rotateCW(m))); }
 
 class TetrisGame {
-  constructor(seed) {
+  constructor(seed, mode = 'classic') {
+    this.mode = mode;       // 'classic' oder 'battle'
+    this.over = false;      // nur im Modus Angriff: ausgeschieden
+    this.pendingGarbage = 0;
+    this.garbageRng = mulberry32(seed ^ 0x5bd1e995);
+    this.onAttack = null;   // Callback(anzahlReihen)
     this.rng = mulberry32(seed);
     this.board = new Uint8Array(COLS * ROWS);
     this.bag = [];
@@ -82,8 +87,10 @@ class TetrisGame {
   }
 
   // Klassisch auf Zeit: Wer oben anstößt, bekommt ein leeres Feld und spielt weiter.
+  // Angriff: Wer oben anstößt, scheidet aus.
   topOut() {
     this.topOuts++;
+    if (this.mode === 'battle') { this.over = true; return; }
     this.board.fill(0);
     this.flash = 600;
   }
@@ -161,9 +168,32 @@ class TetrisGame {
       if (by < 0) { above = true; continue; }
       this.board[by * COLS + p.x + x] = p.id;
     }
-    this.clearLines();
+    const cleared = this.clearLines();
     if (above) this.topOut();
+    if (this.over) { this.version++; return; }
+    if (this.mode === 'battle') {
+      // Gelöschte Reihen verringern zuerst eingehenden Müll, der Rest geht als Angriff raus
+      let atk = [0, 0, 1, 2, 4][cleared];
+      const cancel = Math.min(atk, this.pendingGarbage);
+      this.pendingGarbage -= cancel; atk -= cancel;
+      if (atk > 0 && this.onAttack) this.onAttack(atk);
+      if (!cleared && this.pendingGarbage > 0) this.applyGarbage();
+      if (this.over) { this.version++; return; }
+    }
     this.spawn();
+  }
+
+  addGarbage(n) { if (!this.over) { this.pendingGarbage += n; this.version++; } }
+
+  applyGarbage() {
+    const n = Math.min(this.pendingGarbage, ROWS);
+    this.pendingGarbage -= n;
+    // Wenn oben Steine herausgeschoben würden: ausgeschieden
+    for (let i = 0; i < n * COLS; i++) if (this.board[i]) { this.topOut(); }
+    if (this.over) return;
+    this.board.copyWithin(0, n * COLS);
+    const hole = Math.floor(this.garbageRng() * COLS);
+    for (let y = ROWS - n; y < ROWS; y++) for (let x = 0; x < COLS; x++) this.board[y * COLS + x] = x === hole ? 0 : 8;
   }
 
   clearLines() {
@@ -183,11 +213,13 @@ class TetrisGame {
       this.lines += cleared;
       this.level = 1 + Math.floor(this.lines / 10);
     }
+    return cleared;
   }
 
   gravityInterval() { return Math.max(60, 800 * Math.pow(0.85, this.level - 1)); }
 
   update(dt) {
+    if (this.over) return;
     if (this.flash > 0) this.flash = Math.max(0, this.flash - dt);
     if (this.grounded()) {
       this.lockAcc += dt;
@@ -209,6 +241,7 @@ class TetrisGame {
   serialize() {
     const b = Array.from(this.board);
     const p = this.piece;
+    if (this.over) return b.join('');
     for (let y = 0; y < p.m.length; y++) for (let x = 0; x < p.m.length; x++) {
       if (!p.m[y][x]) continue;
       const by = p.y + y;
