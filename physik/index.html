@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#070a14">
+<title>Physik-Team</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Startseite -->
+<section id="screen-home" class="screen">
+  <div class="home">
+    <h1><span class="neon-c">Physik</span>-<span class="neon-p">Team</span></h1>
+    <p class="subtitle">Gemeinsam Physik-Rätsel lösen</p>
+    <div class="cards">
+      <form id="join-form" class="card" autocomplete="off">
+        <h2>Mitspielen</h2>
+        <label>Raum-Code
+          <input id="join-code" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="1234" required>
+        </label>
+        <label>Dein Name
+          <input id="join-name" maxlength="14" placeholder="z. B. Mia" required>
+        </label>
+        <div class="label">Dein Avatar</div>
+        <div id="avatar-pick" class="avatar-pick"></div>
+        <button type="submit" class="primary">Beitreten</button>
+        <p id="join-error" class="error" hidden></p>
+      </form>
+      <div class="card host-card">
+        <h2>Lehrkraft</h2>
+        <p>Erstellt einen Raum. Dieser Browser wird zur Ansicht für das Smartboard und leitet das Spiel.</p>
+        <button id="host-btn">Raum erstellen</button>
+        <p id="host-error" class="error" hidden></p>
+      </div>
+    </div>
+    <p class="muted small center"><a href="../">Klassen-Tetris</a> · <a href="../rennen/">Klassen-Rennen</a></p>
+  </div>
+</section>
+
+<!-- Lehrkraft: Lobby -->
+<section id="screen-host-lobby" class="screen" hidden>
+  <div class="lobby">
+    <div class="join-info">
+      <div id="host-qr" class="qr"></div>
+      <p class="muted">QR-Code scannen oder öffnen:</p>
+      <p id="host-url" class="url"></p>
+      <p class="muted">Code:</p>
+      <p id="host-code" class="code">----</p>
+    </div>
+    <div class="lobby-side">
+      <h2>Team <span id="host-count">0</span>/18</h2>
+      <div id="host-players" class="player-grid"></div>
+      <h2>Szenario</h2>
+      <div id="mode-cards" class="mode-cards"></div>
+      <div class="start-row">
+        <label class="inline">Level <select id="host-level"></select></label>
+        <button id="host-start" class="primary" disabled>Starten</button>
+      </div>
+      <p class="muted small">Dieses Fenster bitte nicht schließen, solange gespielt wird.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Spiel (Lehrkraft und Schüler) -->
+<section id="screen-game" class="screen" hidden>
+  <header class="topbar">
+    <span id="game-title" class="title">Physik-Team</span>
+    <span class="host-tools" id="host-tools" hidden>
+      <label class="toggle"><input type="checkbox" id="help-toggle"> Physik-Hilfen</label>
+      <button id="btn-restart">Neu starten</button>
+      <button id="btn-menu">Auswahl</button>
+    </span>
+    <span id="game-code" class="muted"></span>
+  </header>
+  <div id="stage" class="stage">
+    <canvas id="canvas"></canvas>
+    <div id="intro" class="intro" hidden>
+      <div class="intro-box">
+        <div id="intro-topic" class="muted"></div>
+        <h2 id="intro-name"></h2>
+        <p id="intro-task"></p>
+        <div id="intro-count" class="intro-count"></div>
+      </div>
+    </div>
+    <div id="result" class="intro" hidden>
+      <div class="intro-box">
+        <h2 id="result-title"></h2>
+        <p id="result-text"></p>
+        <div id="result-host" class="result-buttons" hidden>
+          <button id="btn-next" class="primary">Nächstes Level</button>
+          <button id="btn-again">Nochmal</button>
+          <button id="btn-menu2">Auswahl</button>
+        </div>
+        <p id="result-wait" class="muted" hidden>Warte auf die Lehrkraft …</p>
+      </div>
+    </div>
+  </div>
+  <div id="controls" class="controls" hidden></div>
+</section>
+
+<!-- Schüler: Warteraum / Meldungen -->
+<section id="screen-wait" class="screen" hidden>
+  <div class="wait">
+    <canvas id="wait-avatar" width="160" height="160"></canvas>
+    <h2 id="wait-title">Verbinde …</h2>
+    <p id="wait-text" class="muted"></p>
+    <div id="wait-players" class="player-grid"></div>
+    <button id="wait-home" hidden>Zur Startseite</button>
+  </div>
+</section>
+
+<script src="vendor/peerjs.min.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script src="common.js"></script>
+<script src="wippe.js"></script>
+<script src="laser.js"></script>
+<script src="mischen.js"></script>
+<script src="kraftwerk.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
