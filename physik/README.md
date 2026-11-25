@@ -20,6 +20,7 @@ Das Fenster der Lehrkraft muss offen bleiben, solange gespielt wird.
 | **Laser & Spiegel** | Reflexionsgesetz, Lichtverlust pro Spiegel (90 % werden reflektiert) | Auf dem Bild ziehen = Spiegel verschieben, Regler = drehen | Um die Ecke, Doppelt hält besser, Rundherum, Zickzack |
 | **Mischtemperatur** | Richmannsche Mischungsregel, Schmelzwärme von Eis (334 J/g) | Knopf gedrückt halten = eingießen | Lauwarm, Babybad 37 °C, Teewasser 70 °C, Eiskalte Limo |
 | **Kurbel-Kraftwerk** | Energie E = P · t, Leistung in Watt, Energiespeicher | Schnell tippen = kurbeln (1 Tipp = 20 J) | Lichterkette, Ein Abend zu Hause, Wasserkocher-Alarm |
+| **Frage-Labyrinth** | Quiz: kleines Einmaleins (30 Aufgaben), Energieformen und Energiewandlung (16 Fragen) | Steuerkreuz ziehen = laufen, Antwort antippen | Kleines Einmaleins, Energieformen & Energiewandlung |
 
 Jeder Avatar hat in der Wippe eine eigene Masse (25–60 kg) und ist entsprechend groß. Die Werte (Massen, Becher, Ziele) werden in jedem Level neu ausgelost und passen sich der Spielerzahl an, die Aufgaben sind immer lösbar.
 
@@ -27,6 +28,7 @@ Hinweise:
 - Wippe: Am Drehpunkt sitzt ein Dämpfer mit etwas Haftreibung. Die Wippe bleibt stehen, wenn die Drehmomente links und rechts fast gleich sind. Steht die Wippe schon schräg und ist ausgeglichen, bleibt sie schräg (wie in echt): erst etwas aus dem Gleichgewicht bringen, dann wieder ausgleichen.
 - Beim Hebel fällt die Kiste herunter, wenn sie zu schnell oder zu hoch angehoben wird.
 - Laser: Spiegel auf der Ablage (unten) sind ausgeschaltet. Gibt es weniger Schüler als nötige Spiegel, bekommt jeder mehrere (Knopf „Nächster Spiegel“).
+- Labyrinth: Jeder läuft für sich, gewonnen ist das Level, wenn alle innerhalb von 6 Minuten im Ziel ★ sind. Auf jedem ?-Feld (auf dem richtigen Weg und in Sackgassen) bekommt nur dieser Spieler eine Frage auf sein iPad. Richtig = weiter, falsch = 3 Sekunden Pause und eine neue Frage. Gelöste Felder sind für diesen Spieler abgehakt. Das Labyrinth wird jedes Mal neu erzeugt. „Physik-Hilfen“ blendet hier den Weg zum Ziel ein (für Notfälle). Die Fragen stehen am Anfang von `labyrinth.js` und lassen sich dort leicht ändern.
 - Kraftwerk: Der Akku darf weder leer noch ganz voll werden. Sterne gibt es für die Zeit im grünen Bereich.
 
 ## Wenn etwas nicht klappt

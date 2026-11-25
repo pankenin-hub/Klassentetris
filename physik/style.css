@@ -141,3 +141,27 @@ button.crank:active { background: #ffe60022; }
   .host-tools label { display: none; }
   button.big { min-width: 56px; }
 }
+
+/* Frage-Labyrinth */
+.mz { display: flex; gap: 14px; align-items: stretch; min-height: 190px; }
+.mz-panel { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.mz-qtext { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+.mz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mz-opts button { min-height: 58px; font-size: 19px; font-weight: 600; padding: 8px 10px; border-width: 2px; border-color: #ff2bd688; }
+.mz-opts button.picked { background: #ff2bd633; border-color: var(--pink); }
+.mz-fb { font-size: 22px; font-weight: 700; padding: 14px; border-radius: 12px; }
+.mz-fb.ok { color: var(--lime); background: #a6ff0018; border: 2px solid var(--lime); }
+.mz-fb.bad { color: #ffb3c1; background: #ff3b5c18; border: 2px solid var(--danger); }
+.dpad { flex: none; position: relative; width: 190px; height: 190px; border-radius: 50%; background: radial-gradient(circle, #1a2442 0%, #10172a 70%); border: 2px solid #9d7bff88; box-shadow: 0 0 18px #9d7bff44; touch-action: none; }
+.dpad span { position: absolute; font-size: 34px; color: #9d7bff; pointer-events: none; line-height: 1; }
+.dpad .u { top: 12px; left: 50%; transform: translateX(-50%); }
+.dpad .d { bottom: 12px; left: 50%; transform: translateX(-50%); }
+.dpad .l { left: 14px; top: 50%; transform: translateY(-50%); }
+.dpad .r { right: 14px; top: 50%; transform: translateY(-50%); }
+.dpad i { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px; border-radius: 50%; background: #9d7bff44; pointer-events: none; }
+.dpad[data-dir="1"] .u, .dpad[data-dir="2"] .r, .dpad[data-dir="3"] .d, .dpad[data-dir="4"] .l { color: #fff; text-shadow: 0 0 14px #9d7bff; }
+.dpad.off { opacity: .3; }
+@media (max-width: 700px) {
+  .dpad { width: 150px; height: 150px; }
+  .mz-opts { grid-template-columns: 1fr; }
+}
