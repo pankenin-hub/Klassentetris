@@ -8,7 +8,7 @@ const MAX_PLAYERS = 18;
 const INTRO_S = 6;
 const TICK_MS = 50;
 const SUBSTEPS = 6;
-const MODES = [MODE_WIPPE, MODE_LASER, MODE_MISCHEN, MODE_KRAFTWERK];
+const MODES = [MODE_WIPPE, MODE_LASER, MODE_MISCHEN, MODE_KRAFTWERK, MODE_LABYRINTH];
 const params = new URLSearchParams(location.search);
 const $ = id => document.getElementById(id);
 
@@ -520,6 +520,11 @@ const client = {
         if (k >= 0 && r < 0.3) { const o = c.local[k]; o.x = 100 + Math.random() * 1400; o.y = 100 + Math.random() * 650; o.a = Math.random() * 180; this.send({ k, x: o.x, y: o.y, a: o.a }); }
       } else if (m.id === 'mischen') { if (r < 0.2) { on = !on; } this.send({ pour: on }); }
       else if (m.id === 'kraftwerk') this.send({ taps: Math.random() < 0.8 ? 1 : 0 });
+      else if (m.id === 'labyrinth') {
+        const me = view.snap && view.snap.p.find(e => e[0] === this.myId);
+        if (me && me[3] >= 0 && r < 0.3) this.send({ ans: Math.floor(Math.random() * 4), q: me[3] });
+        else if (r < 0.25) this.send({ dir: 1 + Math.floor(Math.random() * 4) });
+      }
     }, 300);
   },
 };
