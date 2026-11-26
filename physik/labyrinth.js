@@ -59,9 +59,29 @@ const MZ_ENERGIE = [
   ['In welcher Einheit wird Energie gemessen?', 'Joule (J)', 'Watt (W)', 'Newton (N)', 'Volt (V)'],
 ];
 
+// Level 3: Unsichtbares Licht – UV und Infrarot (Fragen aus dem UV-/Infrarot-Quiz, erste Antwort ist richtig)
+const MZ_UVIR = [
+  ['Was verursacht Sonnenbrand?', 'UV-Licht', 'Infrarot-Licht', 'sichtbares Licht', 'Licht von der Fernbedienung'],
+  ['Was ist Wärme-Strahlung?', 'Infrarot-Licht', 'UV-Licht', 'sichtbares Licht', 'Schall'],
+  ['Welche Strahlung hat viel Energie?', 'UV-Licht', 'Infrarot-Licht', 'Licht einer Kerze', 'Licht von der Fernbedienung'],
+  ['Was benutzt eine Fernbedienung?', 'Infrarot-Licht', 'UV-Licht', 'rotes Licht', 'Schall'],
+  ['Welche Strahlung fühlen wir als Wärme?', 'Infrarot-Licht', 'UV-Licht', 'blaues Licht', 'keine Strahlung'],
+  ['Welche Strahlung kommt von der Sonne und kann die Haut schädigen?', 'UV-Licht', 'Infrarot-Licht', 'grünes Licht', 'Wärme vom Ofen'],
+  ['Können wir UV-Licht und Infrarot-Licht sehen?', 'Nein, beide sind unsichtbar.', 'Ja, beide sehen wir.', 'Nur UV-Licht sehen wir.', 'Nur Infrarot-Licht sehen wir.'],
+  ['Woher kommt UV-Licht vor allem?', 'von der Sonne', 'von der Heizung', 'von der Fernbedienung', 'vom Mond'],
+  ['Was schützt die Haut vor UV-Licht?', 'Sonnencreme', 'eine Wärmflasche', 'eine Taschenlampe', 'kaltes Wasser'],
+  ['Welches Gerät zeigt warme Körper als Bild?', 'Wärmebildkamera', 'Taschenlampe', 'Lupe', 'Spiegel'],
+  ['Wer sendet Infrarot-Licht aus?', 'jeder warme Körper', 'nur die Sonne', 'nur Lampen', 'niemand'],
+  ['Der Regenbogen ist das sichtbare Licht. Wo liegt UV-Licht?', 'hinter dem violetten Ende', 'hinter dem roten Ende', 'in der Mitte bei Grün', 'gar nicht im Spektrum'],
+  ['Der Regenbogen ist das sichtbare Licht. Wo liegt Infrarot-Licht?', 'hinter dem roten Ende', 'hinter dem violetten Ende', 'in der Mitte bei Gelb', 'gar nicht im Spektrum'],
+  ['Eine Heizlampe macht dich warm. Welche Strahlung ist das?', 'Infrarot-Licht', 'UV-Licht', 'Schall', 'Magnetismus'],
+  ['Wie viel vom Licht können wir mit den Augen sehen?', 'nur einen kleinen Teil', 'alles', 'gar nichts', 'nur UV-Licht'],
+  ['Was passiert bei zu viel UV-Licht auf der Haut?', 'Sonnenbrand', 'Die Haut wird kalt.', 'Die Haut leuchtet.', 'gar nichts'],
+];
+
 function mzShuffleOpts(R, text, opts) {
-  const order = [0, 1, 2, 3];
-  for (let i = 3; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  const order = opts.map((_, k) => k);
+  for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
   return { text, opts: order.map(k => opts[k]), ok: order.indexOf(0) };
 }
 
@@ -120,11 +140,12 @@ const mzCache = new WeakMap(); // vorgezeichnetes Labyrinth je Level
 const MODE_LABYRINTH = {
   id: 'labyrinth',
   name: 'Frage-Labyrinth',
-  topic: 'Quiz: Einmaleins und Energie',
+  topic: 'Quiz: Einmaleins, Energie, UV und Infrarot',
   color: NEON.violet,
   levels: [
     { name: 'Kleines Einmaleins', dur: 360, fields: 20, task: 'Steuert alle euren Avatar ins Ziel ★ unten rechts! Auf jedem ?-Feld bekommst du eine Rechenaufgabe. Erst wenn du richtig antwortest, geht es weiter. Vorsicht, auch in Sackgassen lauern Fragen!' },
     { name: 'Energieformen & Energiewandlung', dur: 360, fields: 14, task: 'Ein neues Labyrinth! Auf den ?-Feldern geht es um Energieformen und Energiewandlung. Alle müssen ins Ziel ★, bevor die Zeit abläuft.' },
+    { name: 'Unsichtbares Licht: UV & Infrarot', dur: 360, fields: 14, task: 'Licht, das wir nicht sehen können! Auf den ?-Feldern geht es um UV-Licht und Infrarot-Licht. Findet alle den Weg ins Ziel ★, bevor die Zeit abläuft.' },
   ],
 
   init(li, players, seed) {
@@ -167,7 +188,7 @@ const MODE_LABYRINTH = {
 
     const qs = li === 0
       ? mzEinmaleins(R).map(q => mzShuffleOpts(R, q.text, q.opts))
-      : MZ_ENERGIE.map(q => mzShuffleOpts(R, q[0], q.slice(1)));
+      : (li === 1 ? MZ_ENERGIE : MZ_UVIR).map(q => mzShuffleOpts(R, q[0], q.slice(1)));
 
     const p = {};
     for (const pl of players) {

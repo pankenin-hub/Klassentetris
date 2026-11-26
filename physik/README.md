@@ -20,7 +20,7 @@ Das Fenster der Lehrkraft muss offen bleiben, solange gespielt wird.
 | **Laser & Spiegel** | Reflexionsgesetz, Lichtverlust pro Spiegel (90 % werden reflektiert) | Auf dem Bild ziehen = Spiegel verschieben, Regler = drehen | Um die Ecke, Doppelt hält besser, Rundherum, Zickzack |
 | **Mischtemperatur** | Richmannsche Mischungsregel, Schmelzwärme von Eis (334 J/g) | Knopf gedrückt halten = eingießen | Lauwarm, Babybad 37 °C, Teewasser 70 °C, Eiskalte Limo |
 | **Kurbel-Kraftwerk** | Energie E = P · t, Leistung in Watt, Energiespeicher | Schnell tippen = kurbeln (1 Tipp = 20 J) | Lichterkette, Ein Abend zu Hause, Wasserkocher-Alarm |
-| **Frage-Labyrinth** | Quiz: kleines Einmaleins (30 Aufgaben), Energieformen und Energiewandlung (16 Fragen) | Steuerkreuz ziehen = laufen, Antwort antippen | Kleines Einmaleins, Energieformen & Energiewandlung |
+| **Frage-Labyrinth** | Quiz: kleines Einmaleins (30 Aufgaben), Energieformen und Energiewandlung (16 Fragen), UV- und Infrarot-Licht (16 Fragen) | Steuerkreuz ziehen = laufen, Antwort antippen | Kleines Einmaleins, Energieformen & Energiewandlung, Unsichtbares Licht: UV & Infrarot |
 
 Jeder Avatar hat in der Wippe eine eigene Masse (25–60 kg) und ist entsprechend groß. Die Werte (Massen, Becher, Ziele) werden in jedem Level neu ausgelost und passen sich der Spielerzahl an, die Aufgaben sind immer lösbar.
 
