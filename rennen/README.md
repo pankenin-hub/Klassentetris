@@ -23,7 +23,7 @@ Das Fenster der Lehrkraft muss offen bleiben, solange gefahren wird.
 ## Regeln
 
 - Alle fahren auf derselben Strecke. Jeder sieht alle Karts, das eigene ist gelb umrandet und heißt „Du“.
-- Rasen bremst stark. Gelbe Pfeil-Felder geben kurz Turbo.
+- Am Rand der Bahn sind Wände, Abkürzungen über den Rasen gibt es nicht. Wer gegen eine Wand fährt, wird stark abgebremst. Gelbe Pfeil-Felder geben kurz Turbo.
 - Karts schubsen sich gegenseitig ein bisschen weg.
 - Wer zuerst die eingestellte Rundenzahl schafft, gewinnt. Nach dem ersten Zieleinlauf haben die anderen noch 30 Sekunden.
 - Strecken: Rundkurs (leicht), Kurvenreich, Haken.
