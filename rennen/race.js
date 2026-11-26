@@ -3,6 +3,7 @@
 
 const WORLD_W = 1600, WORLD_H = 900;
 const KART_R = 13;           // Radius für Zusammenstöße
+const WALL_GAP = 9;          // so nah kommt die Kart-Mitte an die Wand
 const SAMPLE_STEP = 6;       // Abstand der Mittellinien-Punkte in px
 
 // Strecken: geschlossene Mittellinie aus Kontrollpunkten (wird geglättet)
@@ -14,44 +15,51 @@ const TRACKS = [
   },
   {
     id: 'kurve', name: 'Kurvenreich', width: 110,
-    pts: [[250, 130], [700, 120], [860, 230], [800, 400], [560, 440], [470, 560], [600, 660], [990, 665],
+    pts: [[250, 130], [700, 120], [860, 230], [800, 400], [570, 430], [420, 550], [590, 670], [990, 665],
       [1080, 540], [1030, 380], [1100, 200], [1300, 130], [1480, 250], [1490, 600], [1390, 800],
       [800, 838], [260, 812], [120, 620], [110, 300]],
   },
   {
     id: 'haken', name: 'Haken', width: 110,
-    pts: [[220, 140], [1350, 130], [1480, 250], [1440, 400], [1150, 430], [700, 400], [520, 480],
-      [600, 600], [1100, 600], [1420, 640], [1460, 790], [1250, 830], [300, 820], [130, 700], [120, 280]],
+    pts: [[260, 150], [1300, 135], [1420, 170], [1475, 260], [1430, 385], [1150, 430], [700, 400], [545, 455],
+      [530, 545], [620, 610], [1100, 600], [1380, 640], [1470, 730], [1420, 815], [1250, 835], [300, 825],
+      [170, 790], [120, 690], [115, 300], [150, 190]],
   },
 ];
 
 // ------------------------------------------------------------ Geometrie
-function buildTrack(def) {
-  const P = def.pts, n = P.length, dense = [];
-  for (let i = 0; i < n; i++) {
-    const p0 = P[(i - 1 + n) % n], p1 = P[i], p2 = P[(i + 1) % n], p3 = P[(i + 2) % n];
-    for (let s = 0; s < 40; s++) {
-      const t = s / 40, t2 = t * t, t3 = t2 * t;
-      const f = (a, b, c, d) => 0.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3);
-      dense.push([f(p0[0], p1[0], p2[0], p3[0]), f(p0[1], p1[1], p2[1], p3[1])]);
-    }
-  }
-  // gleichmäßig neu abtasten
-  const pts = [dense[0]];
+// gleichmäßig in Punkte mit festem Abstand zerlegen (geschlossener Linienzug)
+function resample(line, step) {
+  const out = [line[0]];
   let carry = 0;
-  for (let i = 1; i <= dense.length; i++) {
-    let a = dense[i - 1];
-    const b = dense[i % dense.length];
+  for (let i = 1; i <= line.length; i++) {
+    let a = line[i - 1];
+    const b = line[i % line.length];
     let seg = Math.hypot(b[0] - a[0], b[1] - a[1]);
-    while (carry + seg >= SAMPLE_STEP) {
-      const need = SAMPLE_STEP - carry, t = need / seg;
+    while (carry + seg >= step) {
+      const need = step - carry, t = need / seg;
       a = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
-      pts.push(a);
+      out.push(a);
       seg -= need; carry = 0;
     }
     carry += seg;
   }
-  if (Math.hypot(pts[pts.length - 1][0] - pts[0][0], pts[pts.length - 1][1] - pts[0][1]) < SAMPLE_STEP * 0.5) pts.pop();
+  const l = out[out.length - 1];
+  if (Math.hypot(l[0] - out[0][0], l[1] - out[0][1]) < step * 0.5) out.pop();
+  return out;
+}
+
+function buildTrack(def) {
+  // Ecken der Kontrollpunkte rund glätten, damit es keine zu engen Kurven gibt
+  let pts = resample(def.pts, 3);
+  for (let pass = 0; pass < (def.smooth || 900); pass++) {
+    const n = pts.length;
+    pts = pts.map((p, i) => {
+      const a = pts[(i - 1 + n) % n], b = pts[(i + 1) % n];
+      return [(a[0] + 2 * p[0] + b[0]) / 4, (a[1] + 2 * p[1] + b[1]) / 4];
+    });
+  }
+  pts = resample(pts, SAMPLE_STEP);
   const N = pts.length;
   const tan = pts.map((p, i) => {
     const q = pts[(i + 1) % N], r = pts[(i - 1 + N) % N];
@@ -105,7 +113,7 @@ class Kart {
     this.idx = nearest(track, this.x, this.y, -1).i;
     this.crossings = 0;          // wie oft die Ziellinie vorwärts überquert wurde
     this.boost = 0;              // verbleibende Turbo-Zeit in s
-    this.offroad = false;
+    this.wallHit = false;
     this.finished = false;
   }
 
@@ -115,7 +123,7 @@ class Kart {
   update(dt, input, others) {
     const t = this.track;
     // Fahren
-    const maxV = this.boost > 0 ? 560 : this.offroad ? 130 : 340;
+    const maxV = this.boost > 0 ? 560 : 340;
     if (input.up) this.v += (this.v < 0 ? 900 : 430) * dt;
     else if (input.down) this.v -= (this.v > 0 ? 700 : 260) * dt;
     else this.v -= Math.sign(this.v) * Math.min(Math.abs(this.v), 180 * dt);
@@ -143,15 +151,35 @@ class Kart {
         this.v *= 0.97;
       }
     }
-    // Strecke / Rasen
+    // Strecke: Wände am Rand lassen das Kart nicht von der Bahn
     const prev = this.idx, n = nearest(t, this.x, this.y, this.idx);
     this.idx = n.i;
-    this.offroad = n.d > t.half;
+    this.wallHit = this.wall(n.i);
     if (prev > t.N * 0.75 && n.i < t.N * 0.25) this.crossings++;
     else if (prev < t.N * 0.25 && n.i > t.N * 0.75) this.crossings--;
     if (this.crossings > this.laps) this.finished = true;
     // Turbo-Felder
     for (const b of t.boosts) if (Math.hypot(b.x - this.x, b.y - this.y) < 26 && this.boost <= 0) this.boost = 0.9;
+  }
+
+  // Abstand zur Mittellinie begrenzen; beim Anprall wird das Kart langsamer
+  wall(i) {
+    const t = this.track, limit = t.half - WALL_GAP;
+    let cx = 0, cy = 0, bd = Infinity;
+    for (const [ia, ib] of [[i - 1, i], [i, i + 1]]) {
+      const a = t.pts[(ia + t.N) % t.N], b = t.pts[ib % t.N];
+      const dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy || 1;
+      const u = Math.max(0, Math.min(1, ((this.x - a[0]) * dx + (this.y - a[1]) * dy) / l2));
+      const px = a[0] + dx * u, py = a[1] + dy * u, d = Math.hypot(this.x - px, this.y - py);
+      if (d < bd) { bd = d; cx = px; cy = py; }
+    }
+    if (bd <= limit) return false;
+    const nx = (this.x - cx) / bd, ny = (this.y - cy) / bd;
+    this.x = cx + nx * limit; this.y = cy + ny * limit;
+    // wie stark fährt das Kart in die Wand hinein? (1 = frontal)
+    const into = (Math.cos(this.a) * nx + Math.sin(this.a) * ny) * Math.sign(this.v);
+    if (into > 0) this.v *= 1 - 0.85 * into;
+    return true;
   }
 }
 
@@ -172,7 +200,10 @@ function drawTrackImage(track) {
     g.closePath();
   };
   g.lineJoin = 'round';
-  path(); g.strokeStyle = '#e2e8f0'; g.lineWidth = track.def.width + 10; g.stroke();
+  // Wände: rot-weiße Begrenzung auf beiden Seiten
+  path(); g.strokeStyle = '#0f172a'; g.lineWidth = track.def.width + 24; g.stroke();
+  path(); g.strokeStyle = '#f8fafc'; g.lineWidth = track.def.width + 16; g.stroke();
+  g.setLineDash([16, 16]); path(); g.strokeStyle = '#dc2626'; g.lineWidth = track.def.width + 16; g.stroke(); g.setLineDash([]);
   path(); g.strokeStyle = '#475569'; g.lineWidth = track.def.width; g.stroke();
   g.setLineDash([18, 22]); path(); g.strokeStyle = 'rgba(226,232,240,.35)'; g.lineWidth = 3; g.stroke(); g.setLineDash([]);
   // Ziellinie (Schachbrett)
