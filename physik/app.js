@@ -8,7 +8,7 @@ const MAX_PLAYERS = 18;
 const INTRO_S = 6;
 const TICK_MS = 50;
 const SUBSTEPS = 6;
-const MODES = [MODE_WIPPE, MODE_LASER, MODE_MISCHEN, MODE_KRAFTWERK, MODE_LABYRINTH];
+const MODES = [MODE_WIPPE, MODE_LASER, MODE_MISCHEN, MODE_KRAFTWERK, MODE_LABYRINTH, MODE_LABYRINTH_RENNEN];
 const params = new URLSearchParams(location.search);
 const $ = id => document.getElementById(id);
 
@@ -132,7 +132,8 @@ function showResult(res, isHost, hasNext) {
   const box = $('result');
   box.classList.toggle('win', !!res.win);
   box.classList.toggle('fail', !res.win);
-  $('result-title').textContent = res.win ? 'Geschafft!' : 'Leider nicht …';
+  box.classList.toggle('low', !!res.low); // Ergebnis unten, damit z. B. das Siegerpodest sichtbar bleibt
+  $('result-title').textContent = res.title || (res.win ? 'Geschafft!' : 'Leider nicht …');
   $('result-text').textContent = res.text || '';
   $('result-host').hidden = !isHost;
   $('result-wait').hidden = isHost;
@@ -303,7 +304,7 @@ const host = {
     const playing = this.players.filter(p => p.connected);
     if (!playing.length) { this.backToLobby(); return; }
     this.modeIdx = modeIdx; this.li = li;
-    this.st = m.init(li, playing.map(p => ({ id: p.id })), Math.floor(Math.random() * 1e9));
+    this.st = m.init(li, playing.map(p => ({ id: p.id, name: p.name })), Math.floor(Math.random() * 1e9));
     this.setup = m.setup(this.st);
     this.setup.ids = playing.map(p => p.id);
     this.phase = 'intro';
@@ -341,7 +342,7 @@ const host = {
 
   finish(res) {
     this.phase = 'result';
-    this.result = { win: !!res.win, text: res.text || '', next: this.li + 1 < MODES[this.modeIdx].levels.length };
+    this.result = { win: !!res.win, low: !!res.low, title: res.title || '', text: res.text || '', next: this.li + 1 < MODES[this.modeIdx].levels.length };
     this.broadcast(Object.assign({ t: 'result' }, this.result));
     showResult(this.result, true, this.result.next && res.win);
     if (!res.win) $('btn-next').hidden = !this.result.next;
@@ -520,7 +521,7 @@ const client = {
         if (k >= 0 && r < 0.3) { const o = c.local[k]; o.x = 100 + Math.random() * 1400; o.y = 100 + Math.random() * 650; o.a = Math.random() * 180; this.send({ k, x: o.x, y: o.y, a: o.a }); }
       } else if (m.id === 'mischen') { if (r < 0.2) { on = !on; } this.send({ pour: on }); }
       else if (m.id === 'kraftwerk') this.send({ taps: Math.random() < 0.8 ? 1 : 0 });
-      else if (m.id === 'labyrinth') {
+      else if (m.id.startsWith('labyrinth')) {
         const me = view.snap && view.snap.p.find(e => e[0] === this.myId);
         if (me && me[3] >= 0 && r < 0.3) this.send({ ans: Math.floor(Math.random() * 4), q: me[3] });
         else if (r < 0.25) this.send({ dir: 1 + Math.floor(Math.random() * 4) });

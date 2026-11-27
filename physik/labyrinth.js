@@ -166,7 +166,7 @@ const MODE_LABYRINTH = {
     // Frage-Felder: etwa 40 % auf dem richtigen Weg (gleichmäßig verteilt), der Rest auf Abwegen und in Sackgassen
     const fields = [], taken = [];
     const far = i => taken.every(j => Math.abs(i % MZ_COLS - j % MZ_COLS) + Math.abs(((i / MZ_COLS) | 0) - ((j / MZ_COLS) | 0)) >= 4);
-    const nOn = Math.round(lv.fields * 0.4);
+    const nOn = Math.round(lv.fields * (lv.onShare || 0.4));
     for (let k = 1; k <= nOn; k++) {
       let idx = Math.round(4 + (k - 0.5) * (path.length - 7) / nOn);
       idx = clamp(idx, 4, path.length - 3);
@@ -186,9 +186,7 @@ const MODE_LABYRINTH = {
     }
     const fieldAt = new Map(fields.map((f, k) => [f[1] * MZ_COLS + f[0], k]));
 
-    const qs = li === 0
-      ? mzEinmaleins(R).map(q => mzShuffleOpts(R, q.text, q.opts))
-      : (li === 1 ? MZ_ENERGIE : MZ_UVIR).map(q => mzShuffleOpts(R, q[0], q.slice(1)));
+    const qs = this.questions(li, R);
 
     const p = {};
     for (const pl of players) {
@@ -198,6 +196,12 @@ const MODE_LABYRINTH = {
         mask: 0, right: 0, wrong: 0, goal: false, goalT: 0, order, oi: 0, gone: false };
     }
     return { li, lv, cells, start, goal, path, fields, fieldAt, qs, p, t: 0, over: null };
+  },
+
+  questions(li, R) {
+    return li === 0
+      ? mzEinmaleins(R).map(q => mzShuffleOpts(R, q.text, q.opts))
+      : (li === 1 ? MZ_ENERGIE : MZ_UVIR).map(q => mzShuffleOpts(R, q[0], q.slice(1)));
   },
 
   setup(st) {
@@ -389,6 +393,7 @@ const MODE_LABYRINTH = {
         g.fillStyle = '#0a0d18'; g.beginPath(); g.arc(px + r * 0.9, py - r * 1.1, 9, 0, 7); g.fill();
         text(g, badge[0], px + r * 0.9, py - r * 1.1 + 1, { size: 15, weight: '800', color: badge[1] });
       }
+      if (this.drawExtra) this.drawExtra(g, e, px, py, r, ctx);
       if (mine) text(g, 'Du', px, py + r + 13, { size: 14, weight: '800', color: '#fff' });
     }
 
@@ -400,7 +405,7 @@ const MODE_LABYRINTH = {
     const tc = left < 30 ? NEON.red : left < 90 ? NEON.orange : NEON.cyan;
     glow(g, tc, 10); g.fillStyle = tc; g.fillRect(MZ_OX, 18, 600 * (1 - tf), 12); noGlow(g);
     text(g, '⏱ ' + this.clock(left), MZ_OX, 56, { size: 24, weight: '800', align: 'left', color: tc });
-    text(g, '★ im Ziel: ' + inGoal + ' / ' + n, 800, 40, { size: 26, weight: '800', color: NEON.yellow });
+    text(g, this.goalLabel ? this.goalLabel(inGoal, n) : '★ im Ziel: ' + inGoal + ' / ' + n, 800, 40, { size: 26, weight: '800', color: NEON.yellow });
     if (me) text(g, 'Deine Antworten: ' + me[8] + ' ✓  ' + me[9] + ' ✗', WORLD_W - MZ_OX, 40, { size: 22, weight: '700', align: 'right', color: '#dbe7ff' });
     else text(g, '✓ ' + right + ' Aufgaben gelöst', WORLD_W - MZ_OX, 40, { size: 22, weight: '700', align: 'right', color: NEON.green });
   },

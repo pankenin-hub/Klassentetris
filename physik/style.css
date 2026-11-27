@@ -107,6 +107,10 @@ label.inline select { width: auto; margin: 0; }
 .win h2 { color: var(--lime); }
 .fail .intro-box { border-color: var(--danger); }
 .fail h2 { color: var(--danger); }
+.intro.low { background: transparent; pointer-events: none; }
+.intro.low .intro-box { margin: auto auto 10px; padding: 12px 26px; pointer-events: auto; }
+.intro.low .intro-box h2 { font-size: 26px; margin: 2px 0 6px; }
+.intro.low .intro-box p { font-size: 18px; margin: 0 0 6px; }
 
 /* Steuerung (iPad) */
 .controls { flex: none; border-top: 1px solid var(--line); padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: #0b1122; touch-action: none; user-select: none; -webkit-user-select: none; }

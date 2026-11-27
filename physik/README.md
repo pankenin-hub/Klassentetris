@@ -20,6 +20,7 @@ Das Fenster der Lehrkraft muss offen bleiben, solange gespielt wird.
 | **Laser & Spiegel** | Reflexionsgesetz, Lichtverlust pro Spiegel (90 % werden reflektiert) | Auf dem Bild ziehen = Spiegel verschieben, Regler = drehen | Um die Ecke, Doppelt hält besser, Rundherum, Zickzack |
 | **Mischtemperatur** | Richmannsche Mischungsregel, Schmelzwärme von Eis (334 J/g) | Knopf gedrückt halten = eingießen | Lauwarm, Babybad 37 °C, Teewasser 70 °C, Eiskalte Limo |
 | **Kurbel-Kraftwerk** | Energie E = P · t, Leistung in Watt, Energiespeicher | Schnell tippen = kurbeln (1 Tipp = 20 J) | Lichterkette, Ein Abend zu Hause, Wasserkocher-Alarm |
+| **Labyrinth-Wettlauf** | Quiz: Der Bunsenbrenner (15 Fragen aus dem Kahoot, lange Fragen zuerst, kurze zum Schluss) | Steuerkreuz ziehen = laufen, Antwort antippen | Der Bunsenbrenner |
 | **Frage-Labyrinth** | Quiz: kleines Einmaleins (30 Aufgaben), Energieformen und Energiewandlung (16 Fragen), UV- und Infrarot-Licht (16 Fragen) | Steuerkreuz ziehen = laufen, Antwort antippen | Kleines Einmaleins, Energieformen & Energiewandlung, Unsichtbares Licht: UV & Infrarot |
 
 Jeder Avatar hat in der Wippe eine eigene Masse (25–60 kg) und ist entsprechend groß. Die Werte (Massen, Becher, Ziele) werden in jedem Level neu ausgelost und passen sich der Spielerzahl an, die Aufgaben sind immer lösbar.
@@ -29,6 +30,7 @@ Hinweise:
 - Beim Hebel fällt die Kiste herunter, wenn sie zu schnell oder zu hoch angehoben wird.
 - Laser: Spiegel auf der Ablage (unten) sind ausgeschaltet. Gibt es weniger Schüler als nötige Spiegel, bekommt jeder mehrere (Knopf „Nächster Spiegel“).
 - Labyrinth: Jeder läuft für sich, gewonnen ist das Level, wenn alle innerhalb von 6 Minuten im Ziel ★ sind. Auf jedem ?-Feld (auf dem richtigen Weg und in Sackgassen) bekommt nur dieser Spieler eine Frage auf sein iPad. Richtig = weiter, falsch = 3 Sekunden Pause und eine neue Frage. Gelöste Felder sind für diesen Spieler abgehakt. Das Labyrinth wird jedes Mal neu erzeugt. „Physik-Hilfen“ blendet hier den Weg zum Ziel ein (für Notfälle). Die Fragen stehen am Anfang von `labyrinth.js` und lassen sich dort leicht ändern.
+- Labyrinth-Wettlauf: Wie das Frage-Labyrinth, aber jeder gegen jeden. Wer im Ziel ankommt, bekommt seinen Platz. Sobald drei im Ziel sind (bei weniger Spielern: alle), ist das Spiel vorbei. Dann folgt die Siegerehrung auf dem Podest: erst Platz 3, dann Platz 2, dann Platz 1. Die anderen Avatare stehen daneben und jubeln. Läuft die Zeit (7 Minuten) vorher ab, zählt, wer dem Ziel am nächsten ist. Alle bekommen die Fragen in derselben Reihenfolge: viel Text zuerst, wenig Text zum Schluss. Die Fragen stehen am Anfang von `labyrinth-rennen.js`.
 - Kraftwerk: Der Akku darf weder leer noch ganz voll werden. Sterne gibt es für die Zeit im grünen Bereich.
 
 ## Wenn etwas nicht klappt
